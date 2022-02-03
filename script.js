@@ -7,6 +7,7 @@ let num3;
 let operation;
 let result = false;
 let newNumber=false;
+let clean = false;
 
 function sum(a,b){
     a = parseFloat(a);
@@ -42,7 +43,7 @@ buttons.forEach((btn)=>{
     btn.addEventListener("click",()=>{
         
         if(notNumberButtons.indexOf(btn.textContent)<0){
-            if(num1!=undefined)display.textContent="";
+            if(clean){display.textContent="";clean =false;}
             display.textContent+=btn.textContent;
             if(display.textContent.length>1&&display.textContent.slice(0,1)=="0"){
                 display.textContent=display.textContent.slice(1);
@@ -50,11 +51,22 @@ buttons.forEach((btn)=>{
             newNumber=true;
         }
         else if(btn.textContent=="Del")display.textContent=display.textContent.slice(0,-1);
-        else if(btn.textContent=="C"){display.textContent="0";num1=undefined;result=false;operation=undefined;}
+        else if(btn.textContent=="C"){
+            display.textContent="0";
+            num1=undefined;
+            num2=undefined;
+            num3=undefined;
+            operation=undefined;
+            result=false;
+            newNumber=false;
+            clean = false;
+        }
         else if(btn.textContent=="+"){
+            clean=true;
             if(num1==undefined){
                 num1=display.textContent;
                 operation=btn.textContent;
+                newNumber=false;
             }
             else if(result){
                 num1=display.textContent;
@@ -67,6 +79,7 @@ buttons.forEach((btn)=>{
             }
         }
         else if(btn.textContent=="="){
+            clean=true;
             if(num1!=undefined&&operation!=undefined){
                 switch (operation) {
                     case "+":
