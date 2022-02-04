@@ -38,10 +38,20 @@ function div(a, b) {
     return parseFloat((a / b).toFixed(2));
 }
 function operate(num1, num2, operation) {
-    if (result) { operation = prevOperation; num1 = num2; num2 = display.textContent }
+    if (result) { 
+        operation = prevOperation; 
+        if(operation=="+"){num1 = num2; num2 = display.textContent};
+        if(operation=="-"){num1 = display.textContent};
+    }
     switch (operation) {
         case "+":
             display.textContent = sum(num1, num2);
+            result = true;
+            prevOperation = operation;
+            clean = true;
+            break;
+        case "-":
+            display.textContent = res(num1, num2);
             result = true;
             prevOperation = operation;
             clean = true;
@@ -53,7 +63,6 @@ function operate(num1, num2, operation) {
 
 buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
-
         if (notNumberButtons.indexOf(btn.textContent) < 0) {
             if (result) { result = false; }
             if (clean) { display.textContent = ""; clean = false; }
@@ -65,6 +74,7 @@ buttons.forEach((btn) => {
         }
         else if (btn.textContent == "Del") {
             display.textContent = display.textContent.slice(0, -1);
+            if(notNumberButtons.indexOf(display.textContent)>=0||(display.textContent.length<=0)){display.textContent="0"}
             if (operation == "") { num1 = display.textContent;}
             else num2 = display.textContent;
         }
@@ -83,7 +93,14 @@ buttons.forEach((btn) => {
             if (num2 != undefined && !result) { operate(num1, num2, operation) }
             if (result) { num1 = display.textContent; result = False; }
         }
+        else if (btn.textContent == "-") {
+            operation = "-";
+            clean = true;
+            if (num2 != undefined && !result) { operate(num1, num2, operation) }
+            if (result) { num1 = display.textContent; result = False; }
+        }
         else if (btn.textContent == "=") {
+            if(num2==undefined)return;
             operate(num1, num2, operation);
             operation = "";
         }
