@@ -12,21 +12,21 @@ function sum(a, b) {
     a = parseFloat(a);
     b = parseFloat(b);
     if (Number.isInteger(a + b)) return a + b;
-    return parseFloat((a + b).toFixed(2));
+    return parseFloat((a + b).toFixed(3));
 }
 
 function res(a, b) {
     a = parseFloat(a);
     b = parseFloat(b);
     if (Number.isInteger(a - b)) return a - b;
-    return parseFloat((a - b).toFixed(2));
+    return parseFloat((a - b).toFixed(3));
 }
 
 function mul(a, b) {
     a = parseFloat(a);
     b = parseFloat(b);
     if (Number.isInteger(a * b)) return a * b;
-    return parseFloat((a * b).toFixed(2));
+    return parseFloat((a * b).toFixed(3));
 }
 
 function div(a, b) {
@@ -35,9 +35,18 @@ function div(a, b) {
     if (a === 0) { return 0 }
     if (b === 0) { return "ERROR" }
     if (Number.isInteger(a / b)) return a / b;
-    return parseFloat((a / b).toFixed(2));
+    return parseFloat((a / b).toFixed(3));
 }
+
+function porcent(a,b){
+    a = parseFloat(a);
+    b = parseFloat(b);
+    if (Number.isInteger(a*b/100)) return a*b/100;
+    return parseFloat((a*b/100).toFixed(3));
+}
+
 function operate(a, b, c) {
+    result = true;
     switch (c) {
         case "+":
             display.textContent = sum(a, b);
@@ -51,19 +60,24 @@ function operate(a, b, c) {
         case "/":
             display.textContent = div(a, b);
             break;
+        case "%":
+            display.textContent = porcent(a, b);
+            result=false;
+            break;
         default:
             break;
     }
     num3 = num2;
     num1 = display.textContent;
     num2 = undefined;
-    result = true;
+
     clean = true;
 }
 
 buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
         if (notNumberButtons.indexOf(btn.textContent) < 0) {
+            if(num1=="ERROR")result=true;
             if (result) {
                 num1 = undefined;
                 num2 = undefined;
@@ -95,9 +109,6 @@ buttons.forEach((btn) => {
             clean = false;
         }
         else if (btn.textContent == ".") {
-            return
-        }
-        else if (btn.textContent == "%") {
             return
         }
         else if (btn.textContent == "=") {
