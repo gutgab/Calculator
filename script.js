@@ -1,6 +1,7 @@
 const display = document.querySelector(".display");
 const buttons = document.querySelectorAll(".btn");
-const notNumberButtons = ["C", "*", "/", "Del", "+", "-", "=", "%"];
+const numberButtons = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."];
+const notNumberButtons = ["+", "-", "/", "*", "C", "%", "=", "Del"];
 let num1;
 let num2;
 let num3;
@@ -39,11 +40,11 @@ function div(a, b) {
     return parseFloat((a / b).toFixed(3));
 }
 
-function porcent(a,b){
+function porcent(a, b) {
     a = parseFloat(a);
     b = parseFloat(b);
-    if (Number.isInteger(a*b/100)) return a*b/100;
-    return parseFloat((a*b/100).toFixed(3));
+    if (Number.isInteger(a * b / 100)) return a * b / 100;
+    return parseFloat((a * b / 100).toFixed(3));
 }
 
 function operate(a, b, c) {
@@ -63,7 +64,7 @@ function operate(a, b, c) {
             break;
         case "%":
             display.textContent = porcent(a, b);
-            result=false;
+            result = false;
             break;
         default:
             break;
@@ -72,74 +73,96 @@ function operate(a, b, c) {
     num1 = display.textContent;
     num2 = undefined;
     clean = true;
-    if(Number.isInteger(parseFloat(num1))){
-        point=false;
+    if (Number.isInteger(parseFloat(num1))) {
+        point = false;
     }
-    else point=true;
+    else point = true;
+}
+
+function getInput(input) {
+    if (numberButtons.indexOf(input) >= 0) {
+        if (num1 == "ERROR") result = true;
+        if (result && input != ".") {
+            num1 = undefined;
+            num2 = undefined;
+            num3 = undefined;
+            operation = "";
+            result = false;
+            if (display.textContent != "0.") clean = true;
+            if (Number.isInteger(parseFloat(display.textContent))) {
+                point = false;
+            }
+            else point = true;
+        }
+        if (clean) { display.textContent = ""; clean = false; point = false; }
+        if (point == false && input == ".") {
+            if (display.textContent == "") { display.textContent = "0."; clean = false; point = true; return }
+            display.textContent += input;
+            point = true;
+            return
+        }
+        else if (input == ".") {
+            return
+        }
+        display.textContent += input;
+        if (display.textContent.length > 1 && display.textContent.slice(0, 1) == "0" && !display.textContent.includes("."))
+            display.textContent = display.textContent.slice(1);
+        if (operation != "" && display.textContent != "0." && num1 != undefined) num2 = display.textContent;
+        else if (display.textContent != "0.") num1 = display.textContent;
+    }
+    else if (input == "Del") {
+        display.textContent = display.textContent.slice(0, -1);
+        if (display.textContent.includes(".")) { point = true; }
+        else point = false;
+        if (numberButtons.indexOf(display.textContent) < 0 || (display.textContent.length <= 0)) { display.textContent = "0" }
+        if (operation == "") { num1 = display.textContent; }
+        else num2 = display.textContent;
+    }
+    else if (input == "C") {
+        display.textContent = "0";
+        num1 = undefined;
+        num2 = undefined;
+        num3 = undefined;
+        operation = "";
+        result = false;
+        clean = false;
+        point = false;
+    }
+    else if (input == "=") {
+        if (result && num2 == undefined) {
+            num2 = num3;
+            operate(num1, num2, operation);
+        }
+        else if (num2 != undefined) operate(num1, num2, operation);
+    }
+    else if (notNumberButtons.indexOf(input) >= 0) {
+        if (num2 != undefined) operate(num1, num2, operation);
+        result = false;
+        operation = input;
+        clean = true;
+    }
 }
 
 buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
-        if (notNumberButtons.indexOf(btn.textContent) < 0) {
-            if(num1=="ERROR")result=true;
-            if (result&&btn.textContent!=".") {
-                num1 = undefined;
-                num2 = undefined;
-                num3 = undefined;
-                operation = "";
-                result = false;
-                if(display.textContent!="0.") clean = true;
-                if(Number.isInteger(parseFloat(display.textContent))){
-                    point=false;
-                }
-                else point=true;
-            }
-            if (clean) { display.textContent = ""; clean = false;point=false; }
-            if(point==false&&btn.textContent=="."){
-                if(display.textContent==""){display.textContent="0.";clean=false;point=true;return}
-                display.textContent += btn.textContent;
-                point=true;
-                return
-            }
-            else if(btn.textContent=="."){
-                return
-            }
-            display.textContent += btn.textContent;
-            if (display.textContent.length > 1 && display.textContent.slice(0, 1) == "0"&&!display.textContent.includes("."))
-                display.textContent = display.textContent.slice(1);
-            if (operation != ""&&display.textContent!="0."&&num1!=undefined) num2 = display.textContent;
-            else if(display.textContent!="0.")num1 = display.textContent;
-        }
-        else if (btn.textContent == "Del") {
-            display.textContent = display.textContent.slice(0, -1);
-            if(display.textContent.includes(".")){point=true;}
-            else point=false;
-            if (notNumberButtons.indexOf(display.textContent) >= 0 || (display.textContent.length <= 0)) { display.textContent = "0" }
-            if (operation == "") { num1 = display.textContent; }
-            else num2 = display.textContent;
-        }
-        else if (btn.textContent == "C") {
-            display.textContent = "0";
-            num1 = undefined;
-            num2 = undefined;
-            num3=undefined;
-            operation = "";
-            result = false;
-            clean = false;
-            point=false;
-        }
-        else if (btn.textContent == "=") {
-            if (result && num2 == undefined) {
-                num2 = num3;
-                operate(num1, num2, operation);
-            }
-            else if (num2 != undefined) operate(num1, num2, operation);
-        }
-        else {
-            if (num2 != undefined) operate(num1, num2, operation);
-            result = false;
-            operation = btn.textContent;
-            clean = true;
-        }
+        getInput(btn.textContent);
     })
+})
+window.addEventListener("keydown", key => {
+    let newKey;
+    switch (key.key) {
+        case "Enter":
+            newKey="=";
+            break;
+        case "Backspace":
+            newKey="Del";
+            break;
+        case "c":
+            newKey="C";
+            break;
+        default:
+            newKey=key.key;
+            break;
+    }
+    getInput(newKey);
 })
