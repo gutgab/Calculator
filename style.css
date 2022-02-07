@@ -9,7 +9,7 @@ h1{
     margin:2%;
     text-shadow: 1px 1px 5px rgba(0, 0, 0,0.5);
     max-width: 100%;
-    font-size: 30px;
+    font-size: 24px;
 }
 .display{
     margin:auto;
@@ -19,7 +19,7 @@ h1{
     padding: 5%;
     width: 80%;
     text-align: right;
-    font-size: 32px;
+    font-size: 30px;
 }
 .container{
     box-shadow: 3px 3px 5px rgba(0, 0, 0,0.5);
@@ -53,10 +53,24 @@ h1{
     flex:3;
 }
 .btn{
+    cursor: pointer;
     flex: 1 1 33%;
     padding: 2%;
     font-weight: bolder;
+    border: 1px black solid;
     border-radius: 4px;
+}
+.btn:hover{
+    background-color: lightgray;
+}
+.btn.delete:hover{
+    background-color: rgb(243, 124, 77);
+}
+.btn.operation:hover{
+    background-color: rgb(99, 192, 250);
+}
+.btn.equal:hover{
+    background-color: lightcyan;
 }
 .right{
     width: 100%;
