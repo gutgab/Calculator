@@ -1,12 +1,13 @@
 const display = document.querySelector(".display");
 const buttons = document.querySelectorAll(".btn");
-const notNumberButtons = ["C", "*", "/", "Del", "+", "-", "=", ".", "%"];
+const notNumberButtons = ["C", "*", "/", "Del", "+", "-", "=", "%"];
 let num1;
 let num2;
 let num3;
 let operation = "";
 let result = false;
 let clean = false;
+let point = false;
 
 function sum(a, b) {
     a = parseFloat(a);
@@ -70,31 +71,49 @@ function operate(a, b, c) {
     num3 = num2;
     num1 = display.textContent;
     num2 = undefined;
-
     clean = true;
+    if(Number.isInteger(parseFloat(num1))){
+        point=false;
+    }
+    else point=true;
 }
 
 buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
         if (notNumberButtons.indexOf(btn.textContent) < 0) {
             if(num1=="ERROR")result=true;
-            if (result) {
+            if (result&&btn.textContent!=".") {
                 num1 = undefined;
                 num2 = undefined;
                 num3 = undefined;
                 operation = "";
                 result = false;
-                clean = true;
+                if(display.textContent!="0.") clean = true;
+                if(Number.isInteger(parseFloat(display.textContent))){
+                    point=false;
+                }
+                else point=true;
             }
-            if (clean) { display.textContent = ""; clean = false; }
+            if (clean) { display.textContent = ""; clean = false;point=false; }
+            if(point==false&&btn.textContent=="."){
+                if(display.textContent==""){display.textContent="0.";clean=false;point=true;return}
+                display.textContent += btn.textContent;
+                point=true;
+                return
+            }
+            else if(btn.textContent=="."){
+                return
+            }
             display.textContent += btn.textContent;
-            if (display.textContent.length > 1 && display.textContent.slice(0, 1) == "0")
+            if (display.textContent.length > 1 && display.textContent.slice(0, 1) == "0"&&!display.textContent.includes("."))
                 display.textContent = display.textContent.slice(1);
-            if (operation != "") num2 = display.textContent;
-            else num1 = display.textContent;
+            if (operation != ""&&display.textContent!="0."&&num1!=undefined) num2 = display.textContent;
+            else if(display.textContent!="0.")num1 = display.textContent;
         }
         else if (btn.textContent == "Del") {
             display.textContent = display.textContent.slice(0, -1);
+            if(display.textContent.includes(".")){point=true;}
+            else point=false;
             if (notNumberButtons.indexOf(display.textContent) >= 0 || (display.textContent.length <= 0)) { display.textContent = "0" }
             if (operation == "") { num1 = display.textContent; }
             else num2 = display.textContent;
@@ -107,9 +126,7 @@ buttons.forEach((btn) => {
             operation = "";
             result = false;
             clean = false;
-        }
-        else if (btn.textContent == ".") {
-            return
+            point=false;
         }
         else if (btn.textContent == "=") {
             if (result && num2 == undefined) {
