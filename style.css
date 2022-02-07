@@ -8,6 +8,8 @@ body{
 h1{
     margin:2%;
     text-shadow: 1px 1px 5px rgba(0, 0, 0,0.5);
+    max-width: 100%;
+    font-size: 30px;
 }
 .display{
     margin:auto;
