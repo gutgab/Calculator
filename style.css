@@ -1,4 +1,7 @@
 body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin:0;
     padding: 0;
     font-family: 'Orbitron', sans-serif;
@@ -22,11 +25,14 @@ h1{
     font-size: 30px;
 }
 .container{
+    min-height: 380px;
+    margin: auto;
     box-shadow: 3px 3px 5px rgba(0, 0, 0,0.5);
     border: 1px solid rgb(0, 0, 0);
     border-radius: 5px;
-    margin: 8% 30% 0;
-    padding: 5% 0;
+    width: 400px;
+    margin: 5%;
+    padding: 3% 0;
     display: flex;
     flex-direction: column;
     background-color: rgb(179, 176, 176);
